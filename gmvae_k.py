@@ -20,6 +20,7 @@ except IndexError:
 def px_graph(z, y):
     reuse = len(tf.get_collection(tf.GraphKeys.VARIABLES, scope='px')) > 0
     # -- p(z)
+    # This layer is the stochastic layer with 
     with tf.variable_scope('pz'):
         zm = Dense(y, 64, 'zm', reuse=reuse)
         zv = Dense(y, 64, 'zv', tf.nn.softplus, reuse=reuse)
