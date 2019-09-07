@@ -40,6 +40,7 @@ with tf.name_scope('y_'):
     y_ = tf.fill(tf.pack([tf.shape(x)[0], k]), 0.0)
 
 # propose distribution over y
+# this is q(y|x) where probability of cluster y for an input x
 qy_logit, qy = qy_graph(xb, k)
 
 # for each proposed y, infer z and reconstruct x
@@ -47,7 +48,10 @@ z, zm, zv, zm_prior, zv_prior, px_logit = [[None] * k for i in xrange(6)]
 for i in xrange(k):
     with tf.name_scope('graphs/hot_at{:d}'.format(i)):
         y = tf.add(y_, Constant(np.eye(k)[i], name='hot_at_{:d}'.format(i)))
+        # This is q(z|x,y), parametrized by a gaussian of with mean zm
+        # and variance zv
         z[i], zm[i], zv[i] = qz_graph(xb, y)
+        # This is 
         zm_prior[i], zv_prior[i], px_logit[i] = px_graph(z[i], y)
 
 # Aggressive name scoping for pretty graph visualization :P
