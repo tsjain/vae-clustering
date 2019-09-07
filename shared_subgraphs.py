@@ -9,6 +9,7 @@ import sys
 def qy_graph(x, k=10):
     reuse = len(tf.get_collection(tf.GraphKeys.VARIABLES, scope='qy')) > 0
     # -- q(y)
+    # Is it better to call it q(y|x)?
     with tf.variable_scope('qy'):
         h1 = Dense(x, 512, 'layer1', tf.nn.relu, reuse=reuse)
         h2 = Dense(h1, 512, 'layer2', tf.nn.relu, reuse=reuse)
@@ -19,6 +20,7 @@ def qy_graph(x, k=10):
 def qz_graph(x, y):
     reuse = len(tf.get_collection(tf.GraphKeys.VARIABLES, scope='qz')) > 0
     # -- q(z)
+    # Is it better to call it q(z|x,y)?
     with tf.variable_scope('qz'):
         xy = tf.concat(1, (x, y), name='xy/concat')
         h1 = Dense(xy, 512, 'layer1', tf.nn.relu, reuse=reuse)
